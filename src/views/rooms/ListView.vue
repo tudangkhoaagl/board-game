@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
-import { db, ref as fireBaseRef, onValue, push } from '@/firebase/firebase-config';
+import { db, ref as fireBaseRef, onValue } from '@/firebase/firebase-config';
 import Cookies from 'js-cookie';
 import router from '@/router';
 
@@ -14,10 +14,7 @@ onMounted(async () => {
         try {
             if (snapshot.exists()) {
                 const list = snapshot.val();
-                console.log(list)
-
                 roomList.value = list ? Object.values(list) : [];
-                console.log(roomList)
             } else {
                 console.log('Not have data room')
             }
@@ -28,7 +25,7 @@ onMounted(async () => {
 
 })
 
-function redirectToDetail(roomName, username, isNotOwner) {
+function redirectToDetail(roomName) {
     router.push({
         name: 'rooms.detail',
         params: {
@@ -51,7 +48,7 @@ function redirectToDetail(roomName, username, isNotOwner) {
             @click="redirectToDetail(room.name, Cookies.get('user_name'), room.owner !== Cookies.get('user_name'))">
             <blockquote class="blockquote mb-0 row">
                 <div class="col-xl-6">{{ room.name }}</div>
-                <div class="col-xl-6 text-end">{{ typeof (room.players) == 'undefined' ? 0 : room.players.length }}/10
+                <div class="col-xl-6 text-end">{{ room.players.length }}/10
                 </div>
             </blockquote>
         </div>
